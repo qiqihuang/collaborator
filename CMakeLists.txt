@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 2.8)
+project(Collaborator)
+add_subdirectory(gen-cpp)
+add_subdirectory(diff_match_patch_20121119/cpp)
+#add_subdirectory(client)
+add_subdirectory(server)

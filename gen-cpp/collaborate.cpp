@@ -37,9 +37,9 @@ uint32_t collaborate_action_args::read(::apache::thrift::protocol::TProtocol* ip
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->cmd);
-          this->__isset.cmd = true;
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->cmdId);
+          this->__isset.cmdId = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -72,8 +72,8 @@ uint32_t collaborate_action_args::write(::apache::thrift::protocol::TProtocol* o
   xfer += this->user.write(oprot);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("cmd", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString(this->cmd);
+  xfer += oprot->writeFieldBegin("cmdId", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->cmdId);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("params", ::apache::thrift::protocol::T_STRING, 3);
@@ -93,8 +93,8 @@ uint32_t collaborate_action_pargs::write(::apache::thrift::protocol::TProtocol* 
   xfer += (*(this->user)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("cmd", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString((*(this->cmd)));
+  xfer += oprot->writeFieldBegin("cmdId", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32((*(this->cmdId)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("params", ::apache::thrift::protocol::T_STRING, 3);
@@ -231,9 +231,9 @@ uint32_t collaborate_callback_args::read(::apache::thrift::protocol::TProtocol* 
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->event);
-          this->__isset.event = true;
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->eventId);
+          this->__isset.eventId = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -266,8 +266,8 @@ uint32_t collaborate_callback_args::write(::apache::thrift::protocol::TProtocol*
   xfer += this->user.write(oprot);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("event", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString(this->event);
+  xfer += oprot->writeFieldBegin("eventId", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->eventId);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("contents", ::apache::thrift::protocol::T_STRING, 3);
@@ -287,8 +287,8 @@ uint32_t collaborate_callback_pargs::write(::apache::thrift::protocol::TProtocol
   xfer += (*(this->user)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("event", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString((*(this->event)));
+  xfer += oprot->writeFieldBegin("eventId", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32((*(this->eventId)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("contents", ::apache::thrift::protocol::T_STRING, 3);
@@ -410,20 +410,20 @@ uint32_t collaborate_ping_presult::read(::apache::thrift::protocol::TProtocol* i
   return xfer;
 }
 
-void collaborateClient::action(std::string& _return, const UserInfo& user, const std::string& cmd, const std::string& params)
+void collaborateClient::action(std::string& _return, const UserInfo& user, const int32_t cmdId, const std::string& params)
 {
-  send_action(user, cmd, params);
+  send_action(user, cmdId, params);
   recv_action(_return);
 }
 
-void collaborateClient::send_action(const UserInfo& user, const std::string& cmd, const std::string& params)
+void collaborateClient::send_action(const UserInfo& user, const int32_t cmdId, const std::string& params)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("action", ::apache::thrift::protocol::T_CALL, cseqid);
 
   collaborate_action_pargs args;
   args.user = &user;
-  args.cmd = &cmd;
+  args.cmdId = &cmdId;
   args.params = &params;
   args.write(oprot_);
 
@@ -470,19 +470,19 @@ void collaborateClient::recv_action(std::string& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "action failed: unknown result");
 }
 
-void collaborateClient::callback(const UserInfo& user, const std::string& event, const std::string& contents)
+void collaborateClient::callback(const UserInfo& user, const int32_t eventId, const std::string& contents)
 {
-  send_callback(user, event, contents);
+  send_callback(user, eventId, contents);
 }
 
-void collaborateClient::send_callback(const UserInfo& user, const std::string& event, const std::string& contents)
+void collaborateClient::send_callback(const UserInfo& user, const int32_t eventId, const std::string& contents)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("callback", ::apache::thrift::protocol::T_CALL, cseqid);
 
   collaborate_callback_pargs args;
   args.user = &user;
-  args.event = &event;
+  args.eventId = &eventId;
   args.contents = &contents;
   args.write(oprot_);
 
@@ -585,7 +585,7 @@ void collaborateProcessor::process_action(int32_t seqid, ::apache::thrift::proto
 
   collaborate_action_result result;
   try {
-    iface_->action(result.success, args.user, args.cmd, args.params);
+    iface_->action(result.success, args.user, args.cmdId, args.params);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
@@ -638,7 +638,7 @@ void collaborateProcessor::process_callback(int32_t, ::apache::thrift::protocol:
   }
 
   try {
-    iface_->callback(args.user, args.event, args.contents);
+    iface_->callback(args.user, args.eventId, args.contents);
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
       this->eventHandler_->handlerError(ctx, "collaborate.callback");

@@ -9,6 +9,8 @@
 #include <thrift/server/TThreadedServer.h>
 #include <thrift/transport/TServerSocket.h>
 #include <thrift/transport/TBufferTransports.h>
+#include <boost/lexical_cast.hpp>
+#include "json/json.h"
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
@@ -20,7 +22,6 @@ int main(int argc, char **argv)
 {
 	boost::shared_ptr<ClientHandler> clientHandler(new CollaborateClient());
 	clientHandler->StartServer();
-	std::string socketInfo = clientHandler->GetSocketInfo();
 
 	boost::shared_ptr<TTransport> socket(new TSocket("localhost", 19090));
 	boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
@@ -29,8 +30,25 @@ int main(int argc, char **argv)
 	transport->open();
 
 	std::string strRet;
-	std::string strLoginParams;
-	client.action(strRet, "LOGIN", "HIDE");
+	UserInfo user;
+	user.userId = clientHandler->GetSocketInfo();
+	PRINT("userId: %s", user.userId.c_str());
+
+	boost::uuids::random_generator rgen;
+	boost::uuids::uuid u = rgen();
+
+	stringstream ss;
+	ss << u;
+	ss >> user.sessionId;
+	PRINT("sessionId: %s", user.sessionId.c_str());
+
+	Json::Value root;
+	root["login_status"] = StatusT::NORMAL;
+
+	Json::FastWriter writer;
+
+	client.action(strRet, user, LOGIN, writer.write(root));
+
 	transport->close();
 
 	return 0;

@@ -22,12 +22,12 @@ class collaborateHandler : virtual public collaborateIf {
     // Your initialization goes here
   }
 
-  void action(std::string& _return, const UserInfo& user, const std::string& cmd, const std::string& params) {
+  void action(std::string& _return, const UserInfo& user, const int32_t cmdId, const std::string& params) {
     // Your implementation goes here
     printf("action\n");
   }
 
-  void callback(const UserInfo& user, const std::string& event, const std::string& contents) {
+  void callback(const UserInfo& user, const int32_t eventId, const std::string& contents) {
     // Your implementation goes here
     printf("callback\n");
   }

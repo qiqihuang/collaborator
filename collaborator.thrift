@@ -32,14 +32,14 @@ enum StatusT {
 struct UserInfo {
   1: string userId,
   2: string sessionId,
-  3: StatusT status,
+  3: string info,
 }
 
 service collaborate {
 
-  string action(1:UserInfo user, 2:string cmd, 3:string params),
+  string action(1:UserInfo user, 2:i32 cmdId, 3:string params),
   
-  oneway void callback(1:UserInfo user, 2:string event, 3:string contents),
+  oneway void callback(1:UserInfo user, 2:i32 eventId, 3:string contents),
   
   void ping(),
   

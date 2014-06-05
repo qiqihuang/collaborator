@@ -202,8 +202,8 @@ void swap(Operation &a, Operation &b) {
   swap(a.__isset, b.__isset);
 }
 
-const char* UserInfo::ascii_fingerprint = "4F8ABE747D9A2DF14F7E84DDBE60D55C";
-const uint8_t UserInfo::binary_fingerprint[16] = {0x4F,0x8A,0xBE,0x74,0x7D,0x9A,0x2D,0xF1,0x4F,0x7E,0x84,0xDD,0xBE,0x60,0xD5,0x5C};
+const char* UserInfo::ascii_fingerprint = "AB879940BD15B6B25691265F7384B271";
+const uint8_t UserInfo::binary_fingerprint[16] = {0xAB,0x87,0x99,0x40,0xBD,0x15,0xB6,0xB2,0x56,0x91,0x26,0x5F,0x73,0x84,0xB2,0x71};
 
 uint32_t UserInfo::read(::apache::thrift::protocol::TProtocol* iprot) {
 
@@ -242,11 +242,9 @@ uint32_t UserInfo::read(::apache::thrift::protocol::TProtocol* iprot) {
         }
         break;
       case 3:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast2;
-          xfer += iprot->readI32(ecast2);
-          this->status = (StatusT::type)ecast2;
-          this->__isset.status = true;
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->info);
+          this->__isset.info = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -275,8 +273,8 @@ uint32_t UserInfo::write(::apache::thrift::protocol::TProtocol* oprot) const {
   xfer += oprot->writeString(this->sessionId);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("status", ::apache::thrift::protocol::T_I32, 3);
-  xfer += oprot->writeI32((int32_t)this->status);
+  xfer += oprot->writeFieldBegin("info", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->info);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -288,7 +286,7 @@ void swap(UserInfo &a, UserInfo &b) {
   using ::std::swap;
   swap(a.userId, b.userId);
   swap(a.sessionId, b.sessionId);
-  swap(a.status, b.status);
+  swap(a.info, b.info);
   swap(a.__isset, b.__isset);
 }
 

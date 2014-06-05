@@ -15,8 +15,8 @@ namespace huang { namespace collaborator {
 class collaborateIf {
  public:
   virtual ~collaborateIf() {}
-  virtual void action(std::string& _return, const UserInfo& user, const std::string& cmd, const std::string& params) = 0;
-  virtual void callback(const UserInfo& user, const std::string& event, const std::string& contents) = 0;
+  virtual void action(std::string& _return, const UserInfo& user, const int32_t cmdId, const std::string& params) = 0;
+  virtual void callback(const UserInfo& user, const int32_t eventId, const std::string& contents) = 0;
   virtual void ping() = 0;
 };
 
@@ -47,10 +47,10 @@ class collaborateIfSingletonFactory : virtual public collaborateIfFactory {
 class collaborateNull : virtual public collaborateIf {
  public:
   virtual ~collaborateNull() {}
-  void action(std::string& /* _return */, const UserInfo& /* user */, const std::string& /* cmd */, const std::string& /* params */) {
+  void action(std::string& /* _return */, const UserInfo& /* user */, const int32_t /* cmdId */, const std::string& /* params */) {
     return;
   }
-  void callback(const UserInfo& /* user */, const std::string& /* event */, const std::string& /* contents */) {
+  void callback(const UserInfo& /* user */, const int32_t /* eventId */, const std::string& /* contents */) {
     return;
   }
   void ping() {
@@ -59,22 +59,22 @@ class collaborateNull : virtual public collaborateIf {
 };
 
 typedef struct _collaborate_action_args__isset {
-  _collaborate_action_args__isset() : user(false), cmd(false), params(false) {}
+  _collaborate_action_args__isset() : user(false), cmdId(false), params(false) {}
   bool user;
-  bool cmd;
+  bool cmdId;
   bool params;
 } _collaborate_action_args__isset;
 
 class collaborate_action_args {
  public:
 
-  collaborate_action_args() : cmd(), params() {
+  collaborate_action_args() : cmdId(0), params() {
   }
 
   virtual ~collaborate_action_args() throw() {}
 
   UserInfo user;
-  std::string cmd;
+  int32_t cmdId;
   std::string params;
 
   _collaborate_action_args__isset __isset;
@@ -83,8 +83,8 @@ class collaborate_action_args {
     user = val;
   }
 
-  void __set_cmd(const std::string& val) {
-    cmd = val;
+  void __set_cmdId(const int32_t val) {
+    cmdId = val;
   }
 
   void __set_params(const std::string& val) {
@@ -95,7 +95,7 @@ class collaborate_action_args {
   {
     if (!(user == rhs.user))
       return false;
-    if (!(cmd == rhs.cmd))
+    if (!(cmdId == rhs.cmdId))
       return false;
     if (!(params == rhs.params))
       return false;
@@ -120,7 +120,7 @@ class collaborate_action_pargs {
   virtual ~collaborate_action_pargs() throw() {}
 
   const UserInfo* user;
-  const std::string* cmd;
+  const int32_t* cmdId;
   const std::string* params;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -185,22 +185,22 @@ class collaborate_action_presult {
 };
 
 typedef struct _collaborate_callback_args__isset {
-  _collaborate_callback_args__isset() : user(false), event(false), contents(false) {}
+  _collaborate_callback_args__isset() : user(false), eventId(false), contents(false) {}
   bool user;
-  bool event;
+  bool eventId;
   bool contents;
 } _collaborate_callback_args__isset;
 
 class collaborate_callback_args {
  public:
 
-  collaborate_callback_args() : event(), contents() {
+  collaborate_callback_args() : eventId(0), contents() {
   }
 
   virtual ~collaborate_callback_args() throw() {}
 
   UserInfo user;
-  std::string event;
+  int32_t eventId;
   std::string contents;
 
   _collaborate_callback_args__isset __isset;
@@ -209,8 +209,8 @@ class collaborate_callback_args {
     user = val;
   }
 
-  void __set_event(const std::string& val) {
-    event = val;
+  void __set_eventId(const int32_t val) {
+    eventId = val;
   }
 
   void __set_contents(const std::string& val) {
@@ -221,7 +221,7 @@ class collaborate_callback_args {
   {
     if (!(user == rhs.user))
       return false;
-    if (!(event == rhs.event))
+    if (!(eventId == rhs.eventId))
       return false;
     if (!(contents == rhs.contents))
       return false;
@@ -246,7 +246,7 @@ class collaborate_callback_pargs {
   virtual ~collaborate_callback_pargs() throw() {}
 
   const UserInfo* user;
-  const std::string* event;
+  const int32_t* eventId;
   const std::string* contents;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -347,11 +347,11 @@ class collaborateClient : virtual public collaborateIf {
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void action(std::string& _return, const UserInfo& user, const std::string& cmd, const std::string& params);
-  void send_action(const UserInfo& user, const std::string& cmd, const std::string& params);
+  void action(std::string& _return, const UserInfo& user, const int32_t cmdId, const std::string& params);
+  void send_action(const UserInfo& user, const int32_t cmdId, const std::string& params);
   void recv_action(std::string& _return);
-  void callback(const UserInfo& user, const std::string& event, const std::string& contents);
-  void send_callback(const UserInfo& user, const std::string& event, const std::string& contents);
+  void callback(const UserInfo& user, const int32_t eventId, const std::string& contents);
+  void send_callback(const UserInfo& user, const int32_t eventId, const std::string& contents);
   void ping();
   void send_ping();
   void recv_ping();
@@ -407,23 +407,23 @@ class collaborateMultiface : virtual public collaborateIf {
     ifaces_.push_back(iface);
   }
  public:
-  void action(std::string& _return, const UserInfo& user, const std::string& cmd, const std::string& params) {
+  void action(std::string& _return, const UserInfo& user, const int32_t cmdId, const std::string& params) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->action(_return, user, cmd, params);
+      ifaces_[i]->action(_return, user, cmdId, params);
     }
-    ifaces_[i]->action(_return, user, cmd, params);
+    ifaces_[i]->action(_return, user, cmdId, params);
     return;
   }
 
-  void callback(const UserInfo& user, const std::string& event, const std::string& contents) {
+  void callback(const UserInfo& user, const int32_t eventId, const std::string& contents) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->callback(user, event, contents);
+      ifaces_[i]->callback(user, eventId, contents);
     }
-    ifaces_[i]->callback(user, event, contents);
+    ifaces_[i]->callback(user, eventId, contents);
   }
 
   void ping() {

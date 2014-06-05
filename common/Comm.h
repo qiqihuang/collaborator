@@ -8,10 +8,20 @@
 #ifndef COMM_H_
 #define COMM_H_
 
+#include <netdb.h>
+#include <arpa/inet.h>
+
 namespace huang
 {
 namespace collaborator
 {
+
+enum functionlist
+{
+	LOGIN = 1001,
+	LOGOUT,
+	CHANGESTATUS
+};
 
 typedef void* (*TaskFn) (void *);
 
@@ -74,28 +84,40 @@ public:
 		do
 		{
 			struct sockaddr_in addr;
-			bzero(&addr, sizeof(client_addr)); //把一段内存区的内容全部设置为0
-			addr.sin_family = AF_INET;    //internet协议族
-			addr.sin_addr.s_addr = htons(INADDR_ANY);    //INADDR_ANY表示自动获取本机地址
-			addr.sin_port = htons(0);    //0表示让系统自动分配一个空闲端口
-			//创建用于internet的流协议(TCP)socket,用client_socket代表客户机socket
-			int socket = socket(AF_INET, SOCK_STREAM, 0);
+			bzero(&addr, sizeof(addr));
+			addr.sin_family = AF_INET;
+			addr.sin_addr.s_addr = htons(INADDR_ANY);//自动获取本机地址
+			addr.sin_port = htons(0);    //自动分配空闲端口
 
+			int nSocketFd = socket(AF_INET, SOCK_STREAM, 0);
 			if (socket < 0)
 			{
-				printf("Create Socket Failed!\n");
+				PRINT("Socket Create Failed!");
 				continue;
 			}
-			//把客户机的socket和客户机的socket地址结构联系起来
-			if (bind(socket, (struct sockaddr*) &addr, sizeof(addr)))
+
+			int nFlag = 1;
+			setsockopt(nSocketFd, SOL_SOCKET, SO_REUSEADDR, &nFlag, sizeof(nFlag));
+
+			if (-1 == bind(nSocketFd, (struct sockaddr *)&addr, sizeof(addr)))
 			{
-				printf("Bind %u Failed!\n", addr);
+				PRINT("Socket Bind Failed!");
+
+				shutdown(nSocketFd, SHUT_RDWR);
+				close(nSocketFd);
+
 				continue;
 			}
 
-			close(socket);
+		    char clienthost[NI_MAXHOST];
+		    char clientservice[NI_MAXSERV];
 
-			nPort = addr.sin_port;
+			getnameinfo(&addr, sizeof(addr), clienthost, sizeof(clienthost), clientservice, sizeof(clientservice), NI_NUMERICHOST | NI_NUMERICSERV);
+
+			shutdown(nSocketFd, SHUT_RDWR);
+			close(nSocketFd);
+
+			nPort = std::atoi(clientservice);
 
 			break;
 		}

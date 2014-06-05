@@ -151,26 +151,26 @@ class Operation {
 void swap(Operation &a, Operation &b);
 
 typedef struct _UserInfo__isset {
-  _UserInfo__isset() : userId(false), sessionId(false), status(false) {}
+  _UserInfo__isset() : userId(false), sessionId(false), info(false) {}
   bool userId;
   bool sessionId;
-  bool status;
+  bool info;
 } _UserInfo__isset;
 
 class UserInfo {
  public:
 
-  static const char* ascii_fingerprint; // = "4F8ABE747D9A2DF14F7E84DDBE60D55C";
-  static const uint8_t binary_fingerprint[16]; // = {0x4F,0x8A,0xBE,0x74,0x7D,0x9A,0x2D,0xF1,0x4F,0x7E,0x84,0xDD,0xBE,0x60,0xD5,0x5C};
+  static const char* ascii_fingerprint; // = "AB879940BD15B6B25691265F7384B271";
+  static const uint8_t binary_fingerprint[16]; // = {0xAB,0x87,0x99,0x40,0xBD,0x15,0xB6,0xB2,0x56,0x91,0x26,0x5F,0x73,0x84,0xB2,0x71};
 
-  UserInfo() : userId(), sessionId(), status((StatusT::type)0) {
+  UserInfo() : userId(), sessionId(), info() {
   }
 
   virtual ~UserInfo() throw() {}
 
   std::string userId;
   std::string sessionId;
-  StatusT::type status;
+  std::string info;
 
   _UserInfo__isset __isset;
 
@@ -182,8 +182,8 @@ class UserInfo {
     sessionId = val;
   }
 
-  void __set_status(const StatusT::type val) {
-    status = val;
+  void __set_info(const std::string& val) {
+    info = val;
   }
 
   bool operator == (const UserInfo & rhs) const
@@ -192,7 +192,7 @@ class UserInfo {
       return false;
     if (!(sessionId == rhs.sessionId))
       return false;
-    if (!(status == rhs.status))
+    if (!(info == rhs.info))
       return false;
     return true;
   }

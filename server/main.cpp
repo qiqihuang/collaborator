@@ -16,65 +16,6 @@ using namespace ::apache::thrift::transport;
 using namespace ::apache::thrift::server;
 using namespace ::huang::collaborator;
 
-class ServerEventHandler : public server::TServerEventHandler
-{
-public:
-
-	/**
-	 * Called before the server begins.
-	 */
-	void preServe()
-	{
-		PRINT("Server is about Starting");
-	}
-
-	/**
-	 * Called when a new client has connected and is about to being processing.
-	 */
-	void* createContext(boost::shared_ptr<TProtocol> input, boost::shared_ptr<TProtocol> output)
-	{
-		(void) input;
-		(void) output;
-
-		PRINT("Server createContext");
-		gettimeofday(&start, NULL);
-		return NULL;
-	}
-
-	/**
-	 * Called when a client has finished request-handling to delete server
-	 * context.
-	 */
-	void deleteContext(void* serverContext, boost::shared_ptr<TProtocol> input, boost::shared_ptr<TProtocol> output)
-	{
-		(void) serverContext;
-		(void) input;
-		(void) output;
-
-		PRINT("Server deleteContext");
-		gettimeofday(&end, NULL);
-
-		unsigned long dTime = 1000000 * (end.tv_sec - start.tv_sec) + end.tv_usec - start.tv_usec;
-		PRINT("Process time %ld", dTime);
-	}
-
-	/**
-	 * Called when a client is about to call the processor.
-	 */
-	void processContext(void* serverContext, boost::shared_ptr<TTransport> transport)
-	{
-		(void) serverContext;
-		(void) transport;
-
-		PRINT("Server processContext");
-	}
-
-private:
-	struct timeval start;
-	struct timeval end;
-
-};
-
 int main(int argc, char **argv)
 {
 	  int port = 19090;

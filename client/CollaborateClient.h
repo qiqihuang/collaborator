@@ -10,8 +10,12 @@
 
 #include "collaborate.h"
 #include <thrift/server/TServer.h>
+#include <thrift/protocol/TBinaryProtocol.h>
+#include <thrift/transport/TServerSocket.h>
+#include <thrift/transport/TBufferTransports.h>
 #include <thrift/concurrency/ThreadManager.h>
 #include <thrift/concurrency/PlatformThreadFactory.h>
+#include <boost/enable_shared_from_this.hpp>
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
@@ -42,7 +46,7 @@ public:
 	bool StartServer();
 	bool StopServer();
 
-	void* CreateServer(void* pArgs);
+	static void* CreateServer(void* pArgs);
 	std::string GetSocketInfo();
 
 private:

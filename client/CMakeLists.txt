@@ -9,4 +9,4 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 add_executable(client ${EXE_SRC})
 
-target_link_libraries(client common gen-cpp thrift)
+target_link_libraries(client common gen-cpp thrift jsoncpp)

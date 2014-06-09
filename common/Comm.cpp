@@ -1,12 +1,14 @@
 /*
  * Comm.cpp
  *
- *  Created on: 2014��6��4��
+ *  Created on: 2014年6月4日
  *      Author: huangqi
  */
 
 #include "Comm.h"
 #include "Debug.h"
+#include <string.h>
+#include <thrift/transport/TSocket.h>
 
 namespace huang
 {
@@ -32,8 +34,8 @@ int Comm::LeasePort()
 		struct sockaddr_in addr;
 		bzero(&addr, sizeof(addr));
 		addr.sin_family = AF_INET;
-		addr.sin_addr.s_addr = htons(INADDR_ANY);//�Զ���ȡ�����ַ
-		addr.sin_port = htons(0);    //�Զ�������ж˿�
+		addr.sin_addr.s_addr = htons(INADDR_ANY);
+		addr.sin_port = htons(0);
 
 		int nSocketFd = socket(AF_INET, SOCK_STREAM, 0);
 		if (socket < 0)

@@ -7,6 +7,8 @@
 
 #include "CollaborateClient.h"
 #include "Debug.h"
+#include "Comm.h"
+#include "ServerEventHandler.h"
 #include "json/json.h"
 #include <boost/lexical_cast.hpp>
 
@@ -14,12 +16,6 @@ namespace huang
 {
 namespace collaborator
 {
-
-enum functionlist
-{
-	LOGIN = 1001,
-	LOGOUT,
-};
 
 ClientHandler::ClientHandler()
 {
@@ -77,15 +73,14 @@ void* ClientHandler::CreateServer(void* pArgs)
 		  return NULL;
 	  }
 
-	  int nPort = Common::LeasePort();
+	  int nPort = Comm::LeasePort();
 	  boost::shared_ptr<TProcessor> processor(new collaborateProcessor(pThis->shared_from_this()));
-	  boost::shared_ptr<TServerSocket> serverSocket(new TServerSocket(nPort));
-	  boost::shared_ptr<TServerTransport> serverTransport(new TServerTransport(serverSocket));
+	  boost::shared_ptr<TServerTransport> serverTransport(new TServerSocket(nPort));
 	  boost::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
 	  boost::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
 	  boost::shared_ptr<ServerEventHandler> spEventHandler(new ServerEventHandler());
 
-	  pThis->m_socketInfo = serverSocket->getSocketInfo();
+	  //pThis->m_socketInfo = serverSocket->getSocketInfo();
 
 	  pThis->m_spServer.reset(new TThreadedServer(processor, serverTransport, transportFactory, protocolFactory));
 	  pThis->m_spServer->setServerEventHandler(spEventHandler);

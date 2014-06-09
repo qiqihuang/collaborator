@@ -7,13 +7,6 @@
 
 #ifndef COMM_H_
 #define COMM_H_
-#include <thrift/transport/TSocket.h>
-#include <thrift/transport/TBufferTransports.h>
-#include <thrift/concurrency/ThreadManager.h>
-#include <thrift/concurrency/PlatformThreadFactory.h>
-
-using namespace ::apache::thrift;
-using namespace ::apache::thrift::concurrency;
 
 namespace huang
 {
@@ -27,28 +20,6 @@ enum functionlist
 	CHANGESTATUS
 };
 
-typedef void* (*TaskFn) (void *);
-
-class Task : public Runnable
-{
-public:
-	Task(TaskFn pFn, void* pArgs)
-	{
-		m_pFn = pFn;
-		m_pArgs = pArgs;
-	}
-	~Task(){}
-
-	void run()
-	{
-		m_pFn(m_pArgs);
-	}
-
-private:
-	TaskFn m_pFn;
-	void* m_pArgs;
-};
-
 class Comm
 {
 public:
@@ -56,7 +27,7 @@ public:
 	virtual ~Comm();
 
 public:
-	int LeasePort();
+	static int LeasePort();
 };
 
 } /* namespace collaborator */

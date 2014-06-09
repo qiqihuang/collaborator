@@ -9,12 +9,14 @@
 #define CLIENTHANDLER_H_
 
 #include "collaborate.h"
+#include <thrift/server/TServer.h>
 #include <thrift/concurrency/ThreadManager.h>
 #include <thrift/concurrency/PlatformThreadFactory.h>
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
 using namespace ::apache::thrift::transport;
+using namespace ::apache::thrift::server;
 using namespace ::apache::thrift::concurrency;
 
 namespace huang
@@ -40,11 +42,11 @@ public:
 	bool StartServer();
 	bool StopServer();
 
-
+	void* CreateServer(void* pArgs);
 	std::string GetSocketInfo();
 
 private:
-	std::map<std::string, PictureSDK*> m_sessionMap;
+	std::map<std::string, UserInfo*> m_sessionMap;
 	boost::shared_ptr<ThreadManager> m_spThreadManager;
 	boost::shared_ptr<TServer> m_spServer;
 

@@ -2,26 +2,28 @@
 // You should copy it to another filename to avoid overwriting it.
 
 #include "collaborate.h"
-#include "CollaborateClient.h"
-#include "Debug.h"
-#include <sys/time.h>
+//#include "CollaborateClient.h"
 #include <thrift/protocol/TBinaryProtocol.h>
-#include <thrift/server/TThreadedServer.h>
-#include <thrift/transport/TServerSocket.h>
+#include <thrift/transport/TSocket.h>
 #include <thrift/transport/TBufferTransports.h>
 #include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <sstream>
 #include "json/json.h"
+#include "Debug.h"
+#include "Comm.h"
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
 using namespace ::apache::thrift::transport;
-using namespace ::apache::thrift::server;
 using namespace ::huang::collaborator;
 
 int main(int argc, char **argv)
 {
-	boost::shared_ptr<ClientHandler> clientHandler(new CollaborateClient());
-	clientHandler->StartServer();
+	//boost::shared_ptr<ClientHandler> clientHandler(new ClientHandler());
+	//clientHandler->StartServer();
 
 	boost::shared_ptr<TTransport> socket(new TSocket("localhost", 19090));
 	boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
@@ -29,7 +31,7 @@ int main(int argc, char **argv)
 	collaborateClient client(protocol);
 	transport->open();
 
-	std::string strRet;
+	/*std::string strRet;
 	UserInfo user;
 	user.userId = clientHandler->GetSocketInfo();
 	PRINT("userId: %s", user.userId.c_str());
@@ -37,7 +39,7 @@ int main(int argc, char **argv)
 	boost::uuids::random_generator rgen;
 	boost::uuids::uuid u = rgen();
 
-	stringstream ss;
+	std::stringstream ss;
 	ss << u;
 	ss >> user.sessionId;
 	PRINT("sessionId: %s", user.sessionId.c_str());
@@ -47,7 +49,7 @@ int main(int argc, char **argv)
 
 	Json::FastWriter writer;
 
-	client.action(strRet, user, LOGIN, writer.write(root));
+	client.action(strRet, user, LOGIN, writer.write(root));*/
 
 	transport->close();
 

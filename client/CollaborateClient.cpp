@@ -5,7 +5,7 @@
  *      Author: huangqi
  */
 
-#include "ClientHandler.h"
+#include "CollaborateClient.h"
 #include "Debug.h"
 #include "json/json.h"
 #include <boost/lexical_cast.hpp>
@@ -36,21 +36,21 @@ ClientHandler::~ClientHandler()
 {
 	m_spThreadManager->stop();
 
-	std::map<std::string, PictureSDK*>::iterator it;
-	for (it = m_handlerMap.begin(); it != m_handlerMap.end();)
+	std::map<std::string, UserInfo*>::iterator it;
+	for (it = m_sessionMap.begin(); it != m_sessionMap.end();)
 	{
-		PictureSDK* pSDK = it->second;
-		if (NULL == pSDK)
+		UserInfo* pUser = it->second;
+		if (NULL == pUser)
 		{
-			delete pSDK;
-			pSDK = NULL;
+			delete pUser;
+			pUser = NULL;
 		}
 
-		std::string sClientId = it->first;
+		std::string sessionId = it->first;
 
-		m_handlerMap.erase(it++);
+		m_sessionMap.erase(it++);
 
-		PRINT("Erase Client:%s", sClientId.c_str());
+		PRINT("Erase session:%s", sessionId.c_str());
 	}
 }
 
@@ -69,7 +69,7 @@ void ClientHandler::ping()
 	PRINT("ping");
 }
 
-void* CreateServer(void* pArgs)
+void* ClientHandler::CreateServer(void* pArgs)
 {
 	  ClientHandler* pThis = (ClientHandler *)pArgs;
 	  if (NULL == pThis)

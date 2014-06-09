@@ -25,7 +25,7 @@ public:
 public:
 	void action(std::string& _return, const UserInfo& user, const int32_t cmdId, const std::string& params);
 
-	void callback(const UserInfo& user, const std::string& event, const std::string& contents);
+	void callback(const UserInfo& user, const int32_t eventId, const std::string& contents);
 
 	void ping();
 

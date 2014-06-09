@@ -1,11 +1,12 @@
 /*
  * Comm.cpp
  *
- *  Created on: 2014Äê6ÔÂ4ÈÕ
+ *  Created on: 2014ï¿½ï¿½6ï¿½ï¿½4ï¿½ï¿½
  *      Author: huangqi
  */
 
 #include "Comm.h"
+#include "Debug.h"
 
 namespace huang
 {
@@ -21,6 +22,54 @@ Comm::Comm()
 Comm::~Comm()
 {
 	// TODO Auto-generated destructor stub
+}
+
+int Comm::LeasePort()
+{
+	int nPort = -1;
+	do
+	{
+		struct sockaddr_in addr;
+		bzero(&addr, sizeof(addr));
+		addr.sin_family = AF_INET;
+		addr.sin_addr.s_addr = htons(INADDR_ANY);//ï¿½Ô¶ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ö·
+		addr.sin_port = htons(0);    //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ë¿ï¿½
+
+		int nSocketFd = socket(AF_INET, SOCK_STREAM, 0);
+		if (socket < 0)
+		{
+			PRINT("Socket Create Failed!");
+			continue;
+		}
+
+		int nFlag = 1;
+		setsockopt(nSocketFd, SOL_SOCKET, SO_REUSEADDR, &nFlag, sizeof(nFlag));
+
+		if (-1 == bind(nSocketFd, (struct sockaddr *)&addr, sizeof(addr)))
+		{
+			PRINT("Socket Bind Failed!");
+
+			shutdown(nSocketFd, SHUT_RDWR);
+			close(nSocketFd);
+
+			continue;
+		}
+
+		char clienthost[NI_MAXHOST];
+		char clientservice[NI_MAXSERV];
+
+		getnameinfo((sockaddr *)&addr, sizeof(struct sockaddr), clienthost, sizeof(clienthost), clientservice, sizeof(clientservice), NI_NUMERICHOST | NI_NUMERICSERV);
+
+		shutdown(nSocketFd, SHUT_RDWR);
+		close(nSocketFd);
+
+		nPort = std::atoi(clientservice);
+
+		break;
+	}
+	while (true);
+
+	return nPort;
 }
 
 } /* namespace collaborator */

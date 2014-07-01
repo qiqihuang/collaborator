@@ -28,7 +28,7 @@ chat::chat(QString pasvusername, QString pasvuserip) : ui(new Ui::chat)
     xchat = new QUdpSocket(this);
     xport = 45456;
  //   xchat->bind(xport, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint);
-	xchat->bind( QHostAddress::QHostAddress(getIP()), xport );
+    xchat->bind( QHostAddress(getIP()), xport );
     connect(xchat, SIGNAL(readyRead()), this, SLOT(processPendingDatagrams()));
 
 	//TCP部分
@@ -277,7 +277,7 @@ void chat::sendMessage(MessageType type , QString serverAddress)  //发送信息
                 break;
             }
     }
-    xchat->writeDatagram(data,data.length(),QHostAddress::QHostAddress(xpasvuserip), 45456);
+    xchat->writeDatagram(data,data.length(),QHostAddress(xpasvuserip), 45456);
 
 }
 

@@ -4,6 +4,10 @@
 #include <QDialog>
 #include <QtNetwork>
 #include <QtGui>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QScrollBar>
+#include <QColorDialog>
 #include "tcpclient.h"
 #include "tcpserver.h"
 

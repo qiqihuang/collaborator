@@ -1,13 +1,17 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
-#include <QWidget>
 #include <QtNetwork>
 #include <QtGui>
+#include <QAudioOutput>
+#include <QMessageBox>
+#include <QScrollBar>
+#include <QFileDialog>
+#include <QColorDialog>
 #include "tcpclient.h"
 #include "tcpserver.h"
 #include "chat.h"
-using namespace std::tr1;
+
 namespace Ui {
     class Widget;
 }

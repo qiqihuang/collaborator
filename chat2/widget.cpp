@@ -1,6 +1,6 @@
 #include "widget.h"
 #include "ui_widget.h"
-using namespace std::tr1;
+
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Widget)

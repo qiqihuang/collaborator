@@ -440,7 +440,7 @@ void Widget::on_tableWidget_doubleClicked(QModelIndex index)
         QString localHostName = QHostInfo::localHostName();
         QString address = getIP();
         out << Xchat << getUserName() << localHostName << address;
-        udpSocket->writeDatagram(data,data.length(),QHostAddress::QHostAddress(ui->tableWidget->item(index.row(),2)->text()), port);
+        udpSocket->writeDatagram(data,data.length(),QHostAddress(ui->tableWidget->item(index.row(),2)->text()), port);
 
 //		privatechat->xchat->writeDatagram(data,data.length(),QHostAddress::QHostAddress(ui->tableWidget->item(index.row(),2)->text()), 45456);
       //  if(!privatechat->is_opened)

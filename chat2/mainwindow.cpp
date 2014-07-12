@@ -11,8 +11,13 @@ MainWindow::MainWindow(QWidget *parent) :
     this->hide();
 
     m_pLoginW = new login(this);
-    m_pLoginW->show();
-    m_pLoginW->exec();
+    //m_pLoginW->show();
+    //onnect(dialog, &m_pLoginW::clicked, this, &MainWindow::Login);
+    if(m_pLoginW->exec())
+    {
+       // m_account.sUsername = m_pLoginW->ui->edit_username->text();
+        //m_account.sPassword = m_pLoginW->ui->edit_password->text();
+    }
     delete m_pLoginW;
     m_pLoginW = NULL;
 

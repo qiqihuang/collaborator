@@ -11,9 +11,9 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Login</string>
   </property>
-  <widget class="QLabel" name="label_user">
+  <widget class="QLabel" name="label_username">
    <property name="geometry">
     <rect>
      <x>50</x>
@@ -26,7 +26,7 @@
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;UserName&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="edit_user">
+  <widget class="QLineEdit" name="edit_username">
    <property name="geometry">
     <rect>
      <x>130</x>
@@ -36,7 +36,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLabel" name="label_passwd">
+  <widget class="QLabel" name="label_password">
    <property name="geometry">
     <rect>
      <x>50</x>
@@ -49,7 +49,7 @@
     <string>Password</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="edit_passwd">
+  <widget class="QLineEdit" name="edit_password">
    <property name="geometry">
     <rect>
      <x>130</x>

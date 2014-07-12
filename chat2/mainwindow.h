@@ -74,6 +74,13 @@ private:
         LOGIN_LOADING,
         LOGIN_FINISH
     };
+
+    typedef struct {
+        QString sUsername;
+        QString sPassword;
+    }Account;
+
+    Account m_account;
 };
 
 #endif // MAINWINDOW_H
